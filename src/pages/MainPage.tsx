@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import * as React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Card, Paragraph, Title} from 'react-native-paper';

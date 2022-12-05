@@ -2,7 +2,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import EnterExamNote from '../pages/LecturerPages/EnterExamNote';
 import SelectStudents from '../pages/LecturerPages/SelectStudents';
 
-const NavigationStack = () => {
+const ExamStack = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator initialRouteName="Select Students">
@@ -16,4 +16,4 @@ const NavigationStack = () => {
   );
 };
 
-export default NavigationStack;
+export default ExamStack;

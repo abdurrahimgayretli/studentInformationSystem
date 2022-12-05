@@ -4,10 +4,10 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import MainPage from '../pages/MainPage';
 import LessonList from '../pages/StudentPages/LessonList';
-import ManagerPage from '../pages/ManagerPages/ManagerPage';
 import ExamsResults from '../pages/StudentPages/ExamsResults';
 import StudentInfo from '../pages/StudentPages/StudentInfo';
-import NavigationStack from './NavigationStack';
+import ExamStack from './ExamStack';
+import ConfirmStudents from '../pages/ManagerPages/ConfirmStudents';
 
 const NavigationDrawer = () => {
   const Drawer = createDrawerNavigator();
@@ -20,8 +20,8 @@ const NavigationDrawer = () => {
         <Drawer.Screen name="Student Info" component={StudentInfo} />
         <Drawer.Screen name="Lesson List" component={LessonList} />
         <Drawer.Screen name="Exams of Results" component={ExamsResults} />
-        <Drawer.Screen name="Select Student" component={NavigationStack} />
-        <Drawer.Screen name="Manager" component={ManagerPage} />
+        <Drawer.Screen name="Select Student" component={ExamStack} />
+        <Drawer.Screen name="Confirm Students" component={ConfirmStudents} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

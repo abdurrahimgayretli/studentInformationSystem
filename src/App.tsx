@@ -5,7 +5,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import NavigationDrawer from './components/NavigationDrawer';
-import NavigationStack from './components/NavigationStack';
+import ExamStack from './components/ExamStack';
 import {NativeBaseProvider} from 'native-base';
 
 export default function App() {
@@ -18,7 +18,7 @@ export default function App() {
               <Route path="/" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
               <Route path="/mainPage" element={<NavigationDrawer />} />
-              <Route path="/selectStudents" element={<NavigationStack />} />
+              <Route path="/selectStudents" element={<ExamStack />} />
             </Routes>
           </NativeRouter>
         </SafeAreaView>

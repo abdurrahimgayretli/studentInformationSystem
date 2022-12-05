@@ -1,10 +1,13 @@
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
 import React from 'react';
+import {Box, Text} from 'native-base';
 
 const ManagerPage = () => {
   return (
     <View>
-      <Text>ManagerPage</Text>
+      <Box>
+        <Text>Hi</Text>
+      </Box>
     </View>
   );
 };

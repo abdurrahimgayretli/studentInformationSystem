@@ -1,20 +1,26 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {View} from 'react-native';
+import React, {useState} from 'react';
 import {Formik} from 'formik';
-import {Button, Text, TextInput} from 'react-native-paper';
+import {
+  Box,
+  Heading,
+  VStack,
+  FormControl,
+  Input,
+  Button,
+  Center,
+  Select,
+  CheckIcon,
+  View,
+} from 'native-base';
 import {useNavigate} from 'react-router-native';
-import {SelectList} from 'react-native-dropdown-select-list';
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const tittles = [
-    {key: 'Student', value: 'Student'},
-    {key: 'Lecturer', value: 'Lecturer'},
-  ];
+  const tittles = ['Student', 'Lecturer'];
+  const [tittle, setTittle] = useState('');
+
   return (
-    <View className="absolute self-center bg-orange-200 w-[40vh] h-[50vh] rounded-xl top-[20vh] justify-center">
+    <View className="absolute self-center h-[100%] w-[100%] rounded-xl justify-center">
       <Formik
         initialValues={{
           name: '',
@@ -23,63 +29,74 @@ const SignUp = () => {
           tittle: '',
         }}
         onSubmit={values => {
-          console.log(values.name);
+          console.log(values);
           navigate('/login');
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
-          <>
-            <Text className="absolute top-[2vh] self-center font-bold text-xl text-white">
-              Sign Up
-            </Text>
-            <View className="w-[34vh] self-center">
-              <TextInput
-                mode="outlined"
-                label={'Name'}
-                onChangeText={handleChange('name')}
-                onBlur={handleBlur('name')}
-                value={values.name}
-              />
-              <TextInput
-                mode="outlined"
-                label={'Sur Name'}
-                onChangeText={handleChange('surName')}
-                onBlur={handleBlur('surName')}
-                value={values.surName}
-              />
-              <TextInput
-                mode="outlined"
-                label={'TC'}
-                onChangeText={handleChange('tc')}
-                onBlur={handleBlur('tc')}
-                value={String(values.tc)}
-                keyboardType="numeric"
-              />
-              <Button
-                className="top-[30vh] absolute"
-                mode="elevated"
-                onPress={handleSubmit}>
-                Sign Up
-              </Button>
-              <View className="h-[7vh] top-[0.5vh]">
-                <SelectList
-                  boxStyles={{
-                    backgroundColor: 'white',
-                    borderRadius: 8,
-                    borderColor: '#D0D5DD',
-                  }}
-                  dropdownStyles={{backgroundColor: 'white'}}
-                  dropdownItemStyles={{backgroundColor: 'white'}}
-                  defaultOption={{key: '', value: ''}}
-                  data={tittles}
-                  placeholder={'Tittle'}
-                  save={'value'}
-                  setSelected={(val: string) => {
-                    values.tittle = val;
-                  }}
-                />
-              </View>
-            </View>
-          </>
+          <Center className="w-full">
+            <Box safeArea className="p-[1vh] w-[80%] py-[4vh] ">
+              <Heading className="text-gray-800 font-semibold">Welcome</Heading>
+              <Heading className="mt-[0.5vh] text-gray-600 font-medium text-sm">
+                Sign up to continue!
+              </Heading>
+              <VStack className="space-y-3 mt-[2.5vh]">
+                <FormControl>
+                  <FormControl.Label>Name</FormControl.Label>
+                  <Input
+                    onChangeText={handleChange('name')}
+                    onBlur={handleBlur('name')}
+                    value={values.name}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormControl.Label>Surname</FormControl.Label>
+                  <Input
+                    onChangeText={handleChange('surName')}
+                    onBlur={handleBlur('surName')}
+                    value={values.surName}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormControl.Label>TC</FormControl.Label>
+                  <Input
+                    onChangeText={handleChange('tc')}
+                    onBlur={handleBlur('tc')}
+                    value={String(values.tc)}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormControl.Label>Tittle</FormControl.Label>
+
+                  <Select
+                    selectedValue={tittle}
+                    placeholder={'Choose Tittle'}
+                    _selectedItem={{
+                      bg: 'teal.600',
+                      endIcon: <CheckIcon size={'2'} />,
+                    }}
+                    onValueChange={itemValue => {
+                      setTittle(itemValue);
+                      values.tittle = itemValue;
+                    }}>
+                    {tittles.map((elem, i) => {
+                      return (
+                        <Select.Item
+                          key={i}
+                          label={String(elem)}
+                          value={String(elem)}
+                        />
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+                <Button
+                  onPress={handleSubmit}
+                  className="mt-[1vh] bg-indigo-900">
+                  Sign up
+                </Button>
+              </VStack>
+            </Box>
+          </Center>
         )}
       </Formik>
     </View>

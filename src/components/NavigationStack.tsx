@@ -6,7 +6,11 @@ const NavigationStack = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator initialRouteName="Select Students">
-      <Stack.Screen name="Select Students" component={SelectStudents} />
+      <Stack.Screen
+        name="Select Students"
+        options={{headerShown: false}}
+        component={SelectStudents}
+      />
       <Stack.Screen name="Enter Exam's Note" component={EnterExamNote} />
     </Stack.Navigator>
   );

@@ -1,16 +1,22 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View} from 'react-native';
 import {Formik} from 'formik';
-import {Button, Text, TextInput} from 'react-native-paper';
+import {
+  Box,
+  Heading,
+  VStack,
+  FormControl,
+  Input,
+  Button,
+  Center,
+} from 'native-base';
 import {useNavigate} from 'react-router-native';
 
 const Login = () => {
   const navigate = useNavigate();
 
   return (
-    <View className="absolute self-center bg-orange-200 w-[40vh] h-[30vh] rounded-xl top-[30vh] justify-center">
+    <View className="absolute self-center h-[100%] w-[100%] rounded-xl justify-center">
       <Formik
         initialValues={{
           tc: '',
@@ -22,33 +28,38 @@ const Login = () => {
           navigate('/mainPage');
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
-          <>
-            <Text className="absolute top-[2vh] self-center font-bold text-xl text-white">
-              Login
-            </Text>
-            <View className="w-[34vh] self-center">
-              <TextInput
-                mode="outlined"
-                label={'TC'}
-                onChangeText={handleChange('tc')}
-                onBlur={handleBlur('tc')}
-                value={values.tc}
-              />
-              <TextInput
-                mode="outlined"
-                label={'Password'}
-                onChangeText={handleChange('password')}
-                onBlur={handleBlur('password')}
-                value={values.password}
-              />
-              <Button
-                className="top-[16vh] absolute"
-                mode="elevated"
-                onPress={handleSubmit}>
-                Sign Up
-              </Button>
-            </View>
-          </>
+          <Center className="w-full">
+            <Box safeArea className="p-[1vh] w-[80%] py-[4vh] ">
+              <Heading className="text-gray-800 font-semibold">Welcome</Heading>
+              <Heading className="mt-[0.5vh] text-gray-600 font-medium text-sm">
+                Sign up to continue!
+              </Heading>
+              <VStack className="space-y-3 mt-[2.5vh]">
+                <FormControl>
+                  <FormControl.Label>TC</FormControl.Label>
+                  <Input
+                    onChangeText={handleChange('tc')}
+                    onBlur={handleBlur('tc')}
+                    value={String(values.tc)}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormControl.Label>Password</FormControl.Label>
+                  <Input
+                    onChangeText={handleChange('password')}
+                    onBlur={handleBlur('password')}
+                    value={String(values.password)}
+                  />
+                </FormControl>
+
+                <Button
+                  onPress={handleSubmit}
+                  className="mt-[1vh] bg-indigo-900">
+                  Sign up
+                </Button>
+              </VStack>
+            </Box>
+          </Center>
         )}
       </Formik>
     </View>

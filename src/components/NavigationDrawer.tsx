@@ -13,7 +13,9 @@ const NavigationDrawer = () => {
   const Drawer = createDrawerNavigator();
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Main">
+      <Drawer.Navigator
+        initialRouteName="Main"
+        screenOptions={{headerShown: false}}>
         <Drawer.Screen name="Main Page" component={MainPage} />
         <Drawer.Screen name="Student Info" component={StudentInfo} />
         <Drawer.Screen name="Lesson List" component={LessonList} />

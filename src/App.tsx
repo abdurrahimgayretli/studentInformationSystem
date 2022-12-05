@@ -6,20 +6,23 @@ import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import NavigationDrawer from './components/NavigationDrawer';
 import NavigationStack from './components/NavigationStack';
+import {NativeBaseProvider} from 'native-base';
 
 export default function App() {
   return (
     <PaperProvider>
-      <SafeAreaView className="flex-1 bg-slate-200">
-        <NativeRouter>
-          <Routes>
-            <Route path="/" element={<SignUp />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/mainPage" element={<NavigationDrawer />} />
-            <Route path="/selectStudents" element={<NavigationStack />} />
-          </Routes>
-        </NativeRouter>
-      </SafeAreaView>
+      <NativeBaseProvider>
+        <SafeAreaView className="flex-1 bg-white">
+          <NativeRouter>
+            <Routes>
+              <Route path="/" element={<SignUp />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/mainPage" element={<NavigationDrawer />} />
+              <Route path="/selectStudents" element={<NavigationStack />} />
+            </Routes>
+          </NativeRouter>
+        </SafeAreaView>
+      </NativeBaseProvider>
     </PaperProvider>
   );
 }

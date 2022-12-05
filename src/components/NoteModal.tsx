@@ -1,56 +1,53 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
+import {Modal, Portal} from 'react-native-paper';
 import {
-  Modal,
-  DataTable,
+  HStack,
+  Input,
+  NativeBaseProvider,
+  Text,
   IconButton,
-  TextInput,
-  Portal,
-} from 'react-native-paper';
-import {View} from 'react-native';
+  CheckIcon,
+  VStack,
+} from 'native-base';
 
 const NoteModel = (props: any) => {
   return (
     <Portal>
-      <Modal
-        visible={props.show}
-        onDismiss={props.notShow}
-        contentContainerStyle={{
-          height: 150,
-          backgroundColor: 'white',
-        }}>
-        <DataTable className="-top-[1vh]">
-          <DataTable.Header>
-            <DataTable.Title>Exam's Name</DataTable.Title>
-            <DataTable.Title className="left-[2vh]">Note</DataTable.Title>
-            <DataTable.Title numeric>Confirm</DataTable.Title>
-          </DataTable.Header>
-          <DataTable.Row>
-            <DataTable.Cell>
-              <View className="w-[10vh]">
-                <TextInput mode="outlined" />
-              </View>
-              ;
-            </DataTable.Cell>
-            <DataTable.Cell>
-              <View className="w-[10vh]">
-                <TextInput mode="outlined" />
-              </View>
-              ;
-            </DataTable.Cell>
-            <DataTable.Cell className="-right-[8vh]">
-              <View>
-                <IconButton
-                  onPress={props.notShow}
-                  icon={require('../../assets/add.png')}
-                  mode="outlined"
-                  size={30}
-                />
-              </View>
-            </DataTable.Cell>
-          </DataTable.Row>
-        </DataTable>
-      </Modal>
+      <NativeBaseProvider>
+        <Modal
+          visible={props.show}
+          onDismiss={props.notShow}
+          contentContainerStyle={{
+            alignSelf: 'center',
+            width: 300,
+            borderRadius: 8,
+            height: 150,
+            backgroundColor: 'white',
+          }}>
+          <HStack className="space-x-[50vh] self-center">
+            <VStack space={4}>
+              <Text className="text-gray-500 text-xs">Exam's Name</Text>
+              <Input placeholder="Final" />
+            </VStack>
+            <VStack space={4}>
+              <Text className="text-gray-500 w-[6vh] text-xs">Note</Text>
+              <Input placeholder="50" />
+            </VStack>
+            <VStack space={4}>
+              <Text className="text-gray-500 text-xs">Confirm</Text>
+              <IconButton
+                onPress={props.notShow}
+                className="h-[6vh] w-[6vh] rounded-lg"
+                colorScheme="green"
+                icon={<CheckIcon />}
+                variant="solid"
+              />
+            </VStack>
+          </HStack>
+        </Modal>
+      </NativeBaseProvider>
     </Portal>
   );
 };

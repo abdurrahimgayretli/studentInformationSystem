@@ -8,6 +8,9 @@ import ExamsResults from '../pages/StudentPages/ExamsResults';
 import StudentInfo from '../pages/StudentPages/StudentInfo';
 import ExamStack from './ExamStack';
 import ConfirmStudents from '../pages/ManagerPages/ConfirmStudents';
+import EditLessonList from '../pages/ManagerPages/EditLessonList';
+import EditAnnouncement from '../pages/ManagerPages/EditAnnouncement';
+import EditFoodList from '../pages/ManagerPages/EditFoodList';
 
 const NavigationDrawer = () => {
   const Drawer = createDrawerNavigator();
@@ -22,6 +25,9 @@ const NavigationDrawer = () => {
         <Drawer.Screen name="Exams of Results" component={ExamsResults} />
         <Drawer.Screen name="Select Student" component={ExamStack} />
         <Drawer.Screen name="Confirm Students" component={ConfirmStudents} />
+        <Drawer.Screen name="Edit And Add Lesson" component={EditLessonList} />
+        <Drawer.Screen name="Edit Announcement" component={EditAnnouncement} />
+        <Drawer.Screen name="Edit Food List" component={EditFoodList} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

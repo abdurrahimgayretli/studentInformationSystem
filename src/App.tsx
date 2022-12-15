@@ -15,7 +15,7 @@ export default function App() {
         <SafeAreaView className="flex-1 bg-white">
           <NativeRouter>
             <Routes>
-              <Route path="/" element={<SignUp />} />
+              <Route path="/signUp" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
               <Route path="/mainPage" element={<NavigationDrawer />} />
               <Route path="/selectStudents" element={<ExamStack />} />

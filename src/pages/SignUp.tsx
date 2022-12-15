@@ -11,6 +11,9 @@ import {
   Select,
   CheckIcon,
   View,
+  HStack,
+  Text,
+  Link,
 } from 'native-base';
 import {useNavigate} from 'react-router-native';
 
@@ -94,6 +97,28 @@ const SignUp = () => {
                   className="mt-[1vh] bg-indigo-900">
                   Sign up
                 </Button>
+
+                <HStack mt="6" justifyContent="center">
+                  <Text
+                    fontSize="sm"
+                    color="coolGray.600"
+                    _dark={{
+                      color: 'warmGray.200',
+                    }}>
+                    I'm a saved user{' '}
+                  </Text>
+                  <Link
+                    _text={{
+                      color: 'indigo.500',
+                      fontWeight: 'medium',
+                      fontSize: 'sm',
+                    }}
+                    onPress={() => {
+                      navigate('/login');
+                    }}>
+                    Login Page
+                  </Link>
+                </HStack>
               </VStack>
             </Box>
           </Center>

@@ -9,6 +9,9 @@ import {
   Input,
   Button,
   Center,
+  HStack,
+  Text,
+  Link,
 } from 'native-base';
 import {useNavigate} from 'react-router-native';
 
@@ -32,7 +35,7 @@ const Login = () => {
             <Box safeArea className="p-[1vh] w-[80%] py-[4vh] ">
               <Heading className="text-gray-800 font-semibold">Welcome</Heading>
               <Heading className="mt-[0.5vh] text-gray-600 font-medium text-sm">
-                Sign up to continue!
+                Login to continue
               </Heading>
               <VStack className="space-y-3 mt-[2.5vh]">
                 <FormControl>
@@ -57,6 +60,27 @@ const Login = () => {
                   className="mt-[1vh] bg-indigo-900">
                   Sign up
                 </Button>
+                <HStack mt="6" justifyContent="center">
+                  <Text
+                    fontSize="sm"
+                    color="coolGray.600"
+                    _dark={{
+                      color: 'warmGray.200',
+                    }}>
+                    I'm a new user.{' '}
+                  </Text>
+                  <Link
+                    _text={{
+                      color: 'indigo.500',
+                      fontWeight: 'medium',
+                      fontSize: 'sm',
+                    }}
+                    onPress={() => {
+                      navigate('/signUp');
+                    }}>
+                    Sign Up
+                  </Link>
+                </HStack>
               </VStack>
             </Box>
           </Center>

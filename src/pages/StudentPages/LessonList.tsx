@@ -3,7 +3,8 @@ import {ScrollView, View} from 'react-native';
 import {DataTable} from 'react-native-paper';
 import {IconButton, HamburgerIcon, HStack, Text} from 'native-base';
 
-const StudentPage = ({navigation}: any) => {
+const StudentPage = ({navigation, route}: any) => {
+  const {user} = route.params;
   return (
     <>
       <HStack>
@@ -26,8 +27,12 @@ const StudentPage = ({navigation}: any) => {
           </DataTable.Header>
           <ScrollView>
             <DataTable.Row>
-              <DataTable.Cell>Mobil Programlama</DataTable.Cell>
-              <DataTable.Cell numeric>Ferhat Bozkurt</DataTable.Cell>
+              {user.lesson.map((val: any) => (
+                <>
+                  <DataTable.Cell>{val.lessonName}</DataTable.Cell>
+                  <DataTable.Cell numeric>{val.lecturer.name}</DataTable.Cell>
+                </>
+              ))}
             </DataTable.Row>
           </ScrollView>
         </DataTable>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Formik} from 'formik';
 import {
   Box,
@@ -15,25 +15,58 @@ import {
   Text,
   Link,
 } from 'native-base';
-import {useNavigate} from 'react-router-native';
+import {User, useRealm} from '../models/User';
 
-const SignUp = () => {
-  const navigate = useNavigate();
-  const tittles = ['Student', 'Lecturer'];
-  const [tittle, setTittle] = useState('');
+const SignUp = ({navigation}: any) => {
+  const [selectTitle, setSelectTittle] = useState('');
+  const titles = ['Student', 'Lecturer'];
+
+  const realm = useRealm();
+
+  const handleRegisterUser = useCallback(
+    (
+      tc: string,
+      name: string,
+      surName: string,
+      telNo: string,
+      mail: string,
+      title: string,
+    ): void => {
+      if (!tc) {
+        return;
+      }
+      realm.write(() => {
+        realm.create(
+          selectTitle,
+          User.register(tc, name, surName, telNo, mail, title, tc),
+        );
+        realm.create('User', User.checkUser(tc, tc, title));
+      });
+    },
+    [realm, selectTitle],
+  );
 
   return (
     <View className="absolute self-center h-[100%] w-[100%] rounded-xl justify-center">
       <Formik
         initialValues={{
-          name: '',
-          surName: '',
-          tc: 0,
-          tittle: '',
+          name: 'caner',
+          surName: 'köroglu',
+          tc: 61,
+          telNo: 43,
+          mail: 'caner@gmail.com',
+          title: '',
         }}
         onSubmit={values => {
-          console.log(values);
-          navigate('/login');
+          handleRegisterUser(
+            String(values.tc),
+            values.name,
+            values.surName,
+            String(values.telNo),
+            values.mail,
+            values.title,
+          );
+          navigation.navigate('Login');
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
           <Center className="w-full">
@@ -68,20 +101,35 @@ const SignUp = () => {
                   />
                 </FormControl>
                 <FormControl>
+                  <FormControl.Label>Telephone Number</FormControl.Label>
+                  <Input
+                    onChangeText={handleChange('telNo')}
+                    onBlur={handleBlur('telNo')}
+                    value={String(values.telNo)}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormControl.Label>Mail</FormControl.Label>
+                  <Input
+                    onChangeText={handleChange('mail')}
+                    onBlur={handleBlur('mail')}
+                    value={values.mail}
+                  />
+                </FormControl>
+                <FormControl>
                   <FormControl.Label>Tittle</FormControl.Label>
-
                   <Select
-                    selectedValue={tittle}
-                    placeholder={'Choose Tittle'}
+                    selectedValue={selectTitle}
+                    placeholder={'Choose Title'}
                     _selectedItem={{
                       bg: 'teal.600',
                       endIcon: <CheckIcon size={'2'} />,
                     }}
                     onValueChange={itemValue => {
-                      setTittle(itemValue);
-                      values.tittle = itemValue;
+                      setSelectTittle(itemValue);
+                      values.title = itemValue;
                     }}>
-                    {tittles.map((elem, i) => {
+                    {titles.map((elem, i) => {
                       return (
                         <Select.Item
                           key={i}
@@ -114,7 +162,7 @@ const SignUp = () => {
                       fontSize: 'sm',
                     }}
                     onPress={() => {
-                      navigate('/login');
+                      navigation.navigate('Login');
                     }}>
                     Login Page
                   </Link>

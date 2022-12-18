@@ -11,26 +11,91 @@ import ConfirmStudents from '../pages/ManagerPages/ConfirmStudents';
 import EditLessonList from '../pages/ManagerPages/EditLessonList';
 import EditAnnouncement from '../pages/ManagerPages/EditAnnouncement';
 import EditFoodList from '../pages/ManagerPages/EditFoodList';
+import {useQuery} from '../models/User';
+import {createStackNavigator} from '@react-navigation/stack';
+import SignUp from '../pages/SignUp';
+import Login from '../pages/Login';
 
-const NavigationDrawer = () => {
-  const Drawer = createDrawerNavigator();
+const NavigationStack = () => {
+  const Stack = createStackNavigator();
+
   return (
     <NavigationContainer>
-      <Drawer.Navigator
-        initialRouteName="Main"
-        screenOptions={{headerShown: false}}>
-        <Drawer.Screen name="Main Page" component={MainPage} />
-        <Drawer.Screen name="Student Info" component={StudentInfo} />
-        <Drawer.Screen name="Lesson List" component={LessonList} />
-        <Drawer.Screen name="Exams of Results" component={ExamsResults} />
-        <Drawer.Screen name="Select Student" component={ExamStack} />
-        <Drawer.Screen name="Confirm Students" component={ConfirmStudents} />
-        <Drawer.Screen name="Edit And Add Lesson" component={EditLessonList} />
-        <Drawer.Screen name="Edit Announcement" component={EditAnnouncement} />
-        <Drawer.Screen name="Edit Food List" component={EditFoodList} />
-      </Drawer.Navigator>
+      <Stack.Navigator
+        screenOptions={{headerShown: false}}
+        initialRouteName="Sign Up">
+        <Stack.Screen name="Sign Up" component={SignUp} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen
+          name="Pages"
+          component={NavigationDrawer}
+          options={{headerShown: false}}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
-export default NavigationDrawer;
+const NavigationDrawer = ({route}: any) => {
+  const Drawer = createDrawerNavigator();
+
+  const users = useQuery<any>('User');
+  const lecturers = useQuery<any>('Lecturer');
+  const lesson = useQuery<any>('Lesson');
+
+  const {userTc} = route.params;
+  const user = users.find(val => {
+    return val.tc === userTc;
+  });
+
+  return (
+    <Drawer.Navigator
+      initialRouteName="Main Page"
+      screenOptions={{headerShown: false}}>
+      <Drawer.Screen
+        name="Main Page"
+        initialParams={{user: user}}
+        component={MainPage}
+      />
+      {user.title === 'Student' ? (
+        <>
+          <Drawer.Screen
+            name="Student Info"
+            initialParams={{user: user}}
+            component={StudentInfo}
+          />
+          <Drawer.Screen
+            name="Lesson List"
+            initialParams={{user: user}}
+            component={LessonList}
+          />
+          <Drawer.Screen
+            name="Exams of Results"
+            initialParams={{user: user}}
+            component={ExamsResults}
+          />
+        </>
+      ) : user.title === 'Lecturer' ? (
+        <>
+          <Drawer.Screen name="Select Student" component={ExamStack} />
+        </>
+      ) : (
+        <>
+          <Drawer.Screen name="Confirm Students" component={ConfirmStudents} />
+          <Drawer.Screen
+            name="Edit And Add Lesson"
+            initialParams={{lesson: lesson}}
+            component={EditLessonList}
+          />
+          <Drawer.Screen
+            name="Edit Announcement"
+            component={EditAnnouncement}
+          />
+          <Drawer.Screen name="Edit Food List" component={EditFoodList} />
+        </>
+      )}
+    </Drawer.Navigator>
+  );
+};
+
+export default NavigationStack;

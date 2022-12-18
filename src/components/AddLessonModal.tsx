@@ -10,9 +10,36 @@ import {
   IconButton,
   CheckIcon,
   VStack,
+  Select,
 } from 'native-base';
+import {useQuery} from '../models/User';
 
 const AddLessonModal = (props: any) => {
+  const [text, onChangeText] = React.useState(props.lesson);
+  const [selectLecturer, setSelectLecturer] = React.useState(
+    props.lecturerName,
+  );
+
+  const lecturers = useQuery<any>('Lecturer');
+  const [lecturerArray, setLecturerArray] = React.useState<String[]>([]);
+
+  const addLessontoLecturer = (lecturerName: string) => {
+    return props.lecturer(
+      lecturers.find(val => {
+        return val.name === String(lecturerName.split(' ')[0]);
+      }).name,
+    );
+  };
+
+  React.useEffect(() => {
+    lecturers.forEach(val => {
+      return setLecturerArray(oldArray => [
+        ...oldArray,
+        String(val.name) + ' ' + String(val.surName),
+      ]);
+    });
+  }, []);
+
   return (
     <Portal>
       <NativeBaseProvider>
@@ -23,27 +50,60 @@ const AddLessonModal = (props: any) => {
             alignSelf: 'center',
             width: 300,
             borderRadius: 8,
-            height: 150,
+            height: 200,
             backgroundColor: 'white',
           }}>
-          <HStack className="space-x-[50vh] self-center">
+          <VStack className="space-y-[20vh] self-center">
             <VStack space={4}>
-              <Text className="text-gray-500 text-xs w-[20vh]">
-                Lesson's Name
-              </Text>
-              <Input placeholder="Matematik" />
-            </VStack>
-            <VStack space={4}>
-              <Text className="text-gray-500 text-xs">Confirm</Text>
-              <IconButton
-                onPress={props.notShow}
-                className="h-[6vh] w-[6vh] rounded-lg"
-                colorScheme="green"
-                icon={<CheckIcon />}
-                variant="solid"
+              <Text className="text-gray-500 text-xs">Lesson's Name</Text>
+              <Input
+                onChangeText={onChangeText}
+                value={text}
+                placeholder="Matematik"
               />
             </VStack>
-          </HStack>
+            <HStack space={4}>
+              <VStack className="self-end" space={4}>
+                <Text className="text-gray-500 text-xs w-[25vh]">
+                  Lecturer's Name
+                </Text>
+                <Select
+                  selectedValue={selectLecturer}
+                  placeholder={'Choose Title'}
+                  _selectedItem={{
+                    bg: 'teal.600',
+                    endIcon: <CheckIcon size={'2'} />,
+                  }}
+                  onValueChange={itemValue => {
+                    setSelectLecturer(itemValue);
+                    addLessontoLecturer(itemValue);
+                  }}>
+                  {lecturerArray.map((elem, i) => {
+                    return (
+                      <Select.Item
+                        key={i}
+                        label={String(elem)}
+                        value={String(elem)}
+                      />
+                    );
+                  })}
+                </Select>
+              </VStack>
+              <VStack space={4}>
+                <Text className="text-gray-500 text-xs">Confirm</Text>
+                <IconButton
+                  onPress={() => {
+                    props.addLesson(text);
+                    props.notShow();
+                  }}
+                  className="h-[6vh] w-[6vh] rounded-lg"
+                  colorScheme="green"
+                  icon={<CheckIcon />}
+                  variant="solid"
+                />
+              </VStack>
+            </HStack>
+          </VStack>
         </Modal>
       </NativeBaseProvider>
     </Portal>

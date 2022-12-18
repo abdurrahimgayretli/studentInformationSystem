@@ -3,7 +3,9 @@ import React from 'react';
 import {Avatar, Card, DataTable} from 'react-native-paper';
 import {IconButton, HamburgerIcon, HStack, Text} from 'native-base';
 
-const StudentInfo = ({navigation}: any) => {
+const StudentInfo = ({navigation, route}: any) => {
+  const {user} = route.params;
+
   return (
     <>
       <HStack>
@@ -30,24 +32,28 @@ const StudentInfo = ({navigation}: any) => {
             <DataTable>
               <DataTable.Header>
                 <DataTable.Title>Name-Surname</DataTable.Title>
-                <DataTable.Title numeric>No</DataTable.Title>
+                <DataTable.Title numeric>Tc</DataTable.Title>
               </DataTable.Header>
               <View className="top-[-2vh]">
                 <DataTable.Row>
-                  <DataTable.Cell>Abdurrahim Gayretli</DataTable.Cell>
-                  <DataTable.Cell numeric>159</DataTable.Cell>
+                  <DataTable.Cell>
+                    <Text className="capitalize">
+                      {user.name + ' ' + user.surName}
+                    </Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell numeric>{user.tc}</DataTable.Cell>
                 </DataTable.Row>
               </View>
             </DataTable>
             <DataTable className="top-[-4vh]">
               <DataTable.Header>
-                <DataTable.Title>Bölüm</DataTable.Title>
-                <DataTable.Title numeric>Okuduğu Sınıf</DataTable.Title>
+                <DataTable.Title>Telephone Number</DataTable.Title>
+                <DataTable.Title numeric>Mail</DataTable.Title>
               </DataTable.Header>
               <View className="top-[-2vh]">
                 <DataTable.Row>
-                  <DataTable.Cell>Bilgisayar Mühendisliği</DataTable.Cell>
-                  <DataTable.Cell numeric>4. Sınıf</DataTable.Cell>
+                  <DataTable.Cell>{user.telNo}</DataTable.Cell>
+                  <DataTable.Cell numeric>{user.mail}</DataTable.Cell>
                 </DataTable.Row>
               </View>
             </DataTable>

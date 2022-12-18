@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {Formik} from 'formik';
 import {
@@ -13,22 +13,45 @@ import {
   Text,
   Link,
 } from 'native-base';
-import {useNavigate} from 'react-router-native';
+import {useQuery, useRealm} from '../models/User';
 
-const Login = () => {
-  const navigate = useNavigate();
+const Login = ({navigation}: any) => {
+  const user = useQuery<any>('User');
+  const realm = useRealm();
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
+  const login = (values: any) => {
+    user.find(val => {
+      return val.tc === values.tc && val.password === values.password;
+    }) !== undefined
+      ? navigation.navigate(
+          'Pages',
+
+          {userTc: values.tc},
+        )
+      : console.log(false);
+  };
+  const deleteAll = () => {
+    realm.write(() => {
+      realm.deleteAll();
+    });
+  };
 
   return (
     <View className="absolute self-center h-[100%] w-[100%] rounded-xl justify-center">
       <Formik
         initialValues={{
-          tc: '',
-          password: '',
+          tc: '11',
+          password: '11',
         }}
         onSubmit={values => {
-          console.log(values);
+          login(values);
 
-          navigate('/mainPage');
+          // deleteAll();
+          //navigate('/mainPage');
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
           <Center className="w-full">
@@ -53,6 +76,16 @@ const Login = () => {
                     onBlur={handleBlur('password')}
                     value={String(values.password)}
                   />
+                  <Link
+                    _text={{
+                      fontSize: 'xs',
+                      fontWeight: '500',
+                      color: 'indigo.500',
+                    }}
+                    alignSelf="flex-end"
+                    mt="1">
+                    Forget Password?
+                  </Link>
                 </FormControl>
 
                 <Button
@@ -76,9 +109,9 @@ const Login = () => {
                       fontSize: 'sm',
                     }}
                     onPress={() => {
-                      navigate('/signUp');
+                      navigation.navigate('Sign Up');
                     }}>
-                    Sign Up
+                    Sigun Up
                   </Link>
                 </HStack>
               </VStack>

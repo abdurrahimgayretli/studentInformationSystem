@@ -1,16 +1,21 @@
 import {View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {DataTable} from 'react-native-paper';
 import {ScrollView} from 'react-native-gesture-handler';
 import NoteModel from '../../components/NoteModal';
 import {IconButton, AddIcon, DeleteIcon, ThreeDotsIcon} from 'native-base';
+import {useQuery} from '../../models/User';
+import {UserChangeCallback} from 'realm';
 
 const EnterExamNote = ({navigation}: any) => {
   const [visible, setVisible] = React.useState(false);
   const hidden = () => setVisible(false);
-  React.useEffect(() => {
-    console.log(visible);
-  }, [visible]);
+
+  const students = useQuery<UserChangeCallback>('Student');
+
+  useEffect(() => {
+    console.log(students[0]);
+  }, [students]);
 
   return (
     <View className="h-[100%] w-[100%] top-[1vh] absolute">

@@ -2,6 +2,7 @@ import {createRealmContext, Realm} from '@realm/react';
 import {Announcement} from './Announcement';
 import {FoodList} from './FoodList';
 import {Lesson} from './Lesson';
+import {Exam} from './Exam';
 
 export class User extends Realm.Object {
   _id!: Realm.BSON.ObjectId;
@@ -12,8 +13,7 @@ export class User extends Realm.Object {
   mail!: string;
   title!: string;
   password!: string;
-  student!: User[];
-  lecturer!: User;
+  confirm!: string;
   lesson!: Lesson[];
 
   static register(
@@ -24,6 +24,7 @@ export class User extends Realm.Object {
     mail: string,
     title: string,
     password: string,
+    confirm: string,
   ) {
     return {
       _id: new Realm.BSON.ObjectId(),
@@ -34,14 +35,25 @@ export class User extends Realm.Object {
       mail,
       title,
       password,
+      confirm,
     };
   }
-  static checkUser(tc: string, password: string, title: string) {
+  static checkUser(
+    name: string,
+    surName: string,
+    tc: string,
+    password: string,
+    title: string,
+    confirm: string,
+  ) {
     return {
       _id: new Realm.BSON.ObjectId(),
+      name,
+      surName,
       tc,
       password,
       title,
+      confirm,
     };
   }
 
@@ -57,7 +69,6 @@ export class User extends Realm.Object {
       mail: 'string',
       title: 'string',
       password: 'string',
-      lecturer: 'User',
       lesson: 'Lesson[]',
     },
   };
@@ -73,7 +84,6 @@ export class User extends Realm.Object {
       mail: 'string',
       title: 'string',
       password: 'string',
-      student: 'User[]',
       lesson: 'Lesson[]',
     },
   };
@@ -96,9 +106,12 @@ export class User extends Realm.Object {
     primaryKey: '_id',
     properties: {
       _id: 'objectId',
+      name: 'string',
+      surName: 'string',
       tc: 'string',
       password: 'string',
       title: 'string',
+      confirm: 'string',
     },
   };
 }
@@ -106,7 +119,7 @@ export class User extends Realm.Object {
 export const {useRealm, useObject, useQuery, RealmProvider} =
   createRealmContext({
     schema: [
-      Lesson.exam,
+      Exam.exam,
       Lesson.lesson,
       Announcement.schema,
       FoodList.schema,

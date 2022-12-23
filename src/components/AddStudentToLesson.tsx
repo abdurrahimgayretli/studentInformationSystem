@@ -25,8 +25,6 @@ const AddStudentToLesson = (props: any) => {
   const students = useQuery<any>('Student');
   const [studentArray, setStudentArray] = React.useState<String[]>([]);
 
-  const lesson = useQuery<any>('Lesson');
-
   const addLessontoStudent = (studentName: string) => {
     return props.student(
       students.find(val => {
@@ -123,12 +121,14 @@ const AddStudentToLesson = (props: any) => {
           </VStack>
           <VStack className="w-[80%] self-center">
             <ScrollView>
-              {lesson
+              {students
                 .filter(val => {
-                  return val.lessonName === props.lessonName;
-                })[0]
-                .students.map((elem: any) => (
-                  <Box key={elem._id} className="mt-[1vh] rounded-lg">
+                  return val.lesson.find((lessonName: any) => {
+                    return lessonName.lessonName === props.lessonName;
+                  })?.lessonName;
+                })
+                .map((elem, i) => (
+                  <Box key={i} className="mt-[1vh] rounded-lg">
                     <View>
                       <Text className=" capitalize font-serif absolute">
                         {elem.name + ' ' + elem.surName}
@@ -154,6 +154,13 @@ const AddStudentToLesson = (props: any) => {
                     />
                   </Box>
                 ))}
+              {/* {lesson
+                .filter(val => {
+                  return val.lessonName === props.lessonName;
+                })[0]
+                .students.map((elem: any) => (
+                 
+                ))} */}
             </ScrollView>
           </VStack>
         </Modal>

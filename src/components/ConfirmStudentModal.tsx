@@ -1,3 +1,5 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
 import {Avatar, Card, Modal, Portal} from 'react-native-paper';
 import {
@@ -8,8 +10,20 @@ import {
   VStack,
   CloseIcon,
 } from 'native-base';
+import {User, useQuery} from '../models/User';
 
 const ConfirmStudentModal = (props: any) => {
+  const users = useQuery<User>('User');
+  const [user, setUser] = React.useState<User>(useQuery<User>('User')[0]);
+
+  React.useEffect(() => {
+    setUser(
+      users.filter(val => {
+        return String(val._id) === String(props.userID);
+      })[0],
+    );
+  }, []);
+
   return (
     <Portal>
       <NativeBaseProvider>
@@ -41,19 +55,19 @@ const ConfirmStudentModal = (props: any) => {
               <HStack className="pt-[1vh] space-x-[60vh] self-center">
                 <VStack space={4}>
                   <Text className="text-gray-500 text-xs">Name-Surname</Text>
-                  <Text className="text-sm truncate max-w-[20vh] -top-[1vh]">
-                    Abdurrahim Gayretli
+                  <Text className="text-sm truncate max-w-[20vh] -top-[1vh] capitalize">
+                    {user.name + ' ' + user.surName}
                   </Text>
-                  <Text className="text-gray-500 text-xs">Bölüm</Text>
-                  <Text className="text-sm truncate max-w-[20vh] -top-[1vh]">
-                    Bilgisayar Mühendisliği
+                  <Text className="text-gray-500 text-xs">Confirm</Text>
+                  <Text className="text-sm truncate max-w-[20vh] -top-[1vh] capitalize">
+                    {user.confirm}
                   </Text>
                 </VStack>
                 <VStack space={4}>
-                  <Text className="text-gray-500 text-xs">No</Text>
-                  <Text className="text-sm -top-[1vh]">159</Text>
-                  <Text className="text-gray-500 text-xs">Okuduğu Sınıf</Text>
-                  <Text className="text-sm -top-[1vh]">4. Sınıf</Text>
+                  <Text className="text-gray-500 text-xs">Title</Text>
+                  <Text className="text-sm -top-[1vh]">{user.title}</Text>
+                  <Text className="text-gray-500 text-xs">TC</Text>
+                  <Text className="text-sm -top-[1vh]">{user.tc}</Text>
                 </VStack>
               </HStack>
             </Card.Content>

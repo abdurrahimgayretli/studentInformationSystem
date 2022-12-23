@@ -1,5 +1,5 @@
 import {View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {DataTable} from 'react-native-paper';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
@@ -11,13 +11,33 @@ import {
   CheckIcon,
 } from 'native-base';
 import ConfirmStudentModal from '../../components/ConfirmStudentModal';
+import {User, useQuery, useRealm} from '../../models/User';
 
 const ConfirmStudents = ({navigation}: any) => {
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
   const hidden = () => setVisible(false);
-  React.useEffect(() => {
-    console.log(visible);
-  }, [visible]);
+
+  const realm = useRealm();
+  const users = useQuery<User>('User');
+  const [userID, setUserID] = useState('');
+
+  const handleDeleteUser = (val: any) => {
+    realm.write(() => {
+      realm.delete(
+        realm.objects('User').filter((listObj: any) => {
+          return String(listObj._id) === String(val._id);
+        }),
+      );
+    });
+  };
+  const handleUpdateUser = (id: any) => {
+    realm.write(() => {
+      const obj = users.filter((listObj: any) => {
+        return String(listObj._id) === String(id);
+      });
+      obj[0].confirm = 'confirmed';
+    });
+  };
 
   return (
     <>
@@ -40,40 +60,51 @@ const ConfirmStudents = ({navigation}: any) => {
             <DataTable.Title numeric>Select Action</DataTable.Title>
           </DataTable.Header>
           <ScrollView>
-            <HStack>
-              <DataTable.Cell
-                onPress={() => {
-                  setVisible(true);
-                }}>
-                Abdurrahim Gayretli
-              </DataTable.Cell>
+            {users
+              .filter(elem => elem.confirm !== 'confirmed')
+              .map((val, i) => (
+                <HStack key={i}>
+                  <DataTable.Cell
+                    onPress={() => {
+                      setUserID(String(val._id));
+                      setVisible(true);
+                    }}>
+                    <Text className="capitalize">
+                      {val.name + ' ' + val.surName}
+                    </Text>
+                  </DataTable.Cell>
 
-              <IconButton
-                onPress={() => {
-                  navigation.goBack();
-                }}
-                className="h-[5vh] w-[5vh] rounded-lg m-[1vh]"
-                colorScheme="cyan"
-                icon={<CloseIcon />}
-                variant="solid"
-              />
+                  <IconButton
+                    onPress={() => {
+                      handleDeleteUser(val._id);
+                    }}
+                    className="h-[5vh] w-[5vh] rounded-lg m-[1vh]"
+                    colorScheme="red"
+                    icon={<CloseIcon />}
+                    variant="solid"
+                  />
 
-              <IconButton
-                onPress={() => {
-                  navigation.goBack();
-                }}
-                className="h-[5vh] w-[5vh] rounded-lg m-[1vh]"
-                colorScheme="red"
-                icon={<CheckIcon />}
-                variant="solid"
-              />
-            </HStack>
+                  <IconButton
+                    onPress={() => {
+                      handleUpdateUser(val._id);
+                    }}
+                    className="h-[5vh] w-[5vh] rounded-lg m-[1vh]"
+                    colorScheme="cyan"
+                    icon={<CheckIcon />}
+                    variant="solid"
+                  />
+                </HStack>
+              ))}
           </ScrollView>
         </DataTable>
       </View>
       {visible && (
         <View className="">
-          <ConfirmStudentModal show={visible} notShow={hidden} />
+          <ConfirmStudentModal
+            show={visible}
+            notShow={hidden}
+            userID={userID}
+          />
         </View>
       )}
     </>

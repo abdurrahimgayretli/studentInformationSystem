@@ -14,6 +14,7 @@ import {
   Link,
 } from 'native-base';
 import {useQuery, useRealm} from '../models/User';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}: any) => {
   const user = useQuery<any>('User');
@@ -25,19 +26,28 @@ const Login = ({navigation}: any) => {
 
   const login = (values: any) => {
     user.find(val => {
-      return val.tc === values.tc && val.password === values.password;
+      return (
+        val.tc === values.tc &&
+        val.password === values.password &&
+        val.confirm === 'confirmed'
+      );
     }) !== undefined
-      ? navigation.navigate(
-          'Pages',
-
-          {userTc: values.tc},
-        )
+      ? navigation.navigate('Pages', {userTc: values.tc})
       : console.log(false);
+    storeData(values.tc);
   };
   const deleteAll = () => {
     realm.write(() => {
       realm.deleteAll();
     });
+  };
+
+  const storeData = async (tc: string) => {
+    try {
+      await AsyncStorage.setItem('@tc', tc);
+    } catch (e) {
+      // saving error
+    }
   };
 
   return (
@@ -49,9 +59,6 @@ const Login = ({navigation}: any) => {
         }}
         onSubmit={values => {
           login(values);
-
-          // deleteAll();
-          //navigate('/mainPage');
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
           <Center className="w-full">

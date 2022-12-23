@@ -11,9 +11,29 @@ import {
   View,
 } from 'native-base';
 import DatePicker from 'react-native-date-picker';
+import {useQuery, useRealm} from '../models/User';
+import {FoodList} from '../models/FoodList';
 
 const AddFoodListModal = (props: any) => {
-  const [date, setDate] = React.useState(new Date());
+  const [date, setDate] = React.useState<Date>(props.date);
+  const [foodList, setFoodList] = React.useState(props.foodList);
+
+  const realm = useRealm();
+  const foodlists = useQuery<FoodList>('FoodList');
+
+  const handleUpdateFoodList = (id: string, dateF: Date, foodListF: string) => {
+    realm.write(() => {
+      const obj = foodlists.filter((listObj: any) => {
+        return String(listObj._id) === String(id);
+      });
+      obj[0].date = dateF;
+      obj[0].list = foodListF;
+    });
+  };
+
+  React.useEffect(() => {
+    console.log(date);
+  }, [date]);
 
   return (
     <Portal>
@@ -39,12 +59,19 @@ const AddFoodListModal = (props: any) => {
               <TextArea
                 h={'200'}
                 autoCompleteType={undefined}
+                onChangeText={setFoodList}
+                value={foodList}
                 placeholder="Enter food list"
               />
             </View>
 
             <IconButton
-              onPress={props.notShow}
+              onPress={() => {
+                props.id === ''
+                  ? props.addFoodList(date, foodList)
+                  : handleUpdateFoodList(props.id, date, foodList);
+                props.notShow();
+              }}
               className="h-[6vh] w-[20vh] self-center rounded-lg"
               colorScheme="green"
               icon={<CheckIcon />}

@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {View} from 'react-native';
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {DataTable} from 'react-native-paper';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
@@ -12,13 +13,41 @@ import {
   AddIcon,
 } from 'native-base';
 import AddAnnouncementModal from '../../components/AddAnnouncementModal';
+import {useQuery, useRealm} from '../../models/User';
+import {Announcement} from '../../models/Announcement';
 
 const EditAnnouncement = ({navigation}: any) => {
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
   const hidden = () => setVisible(false);
-  React.useEffect(() => {
-    console.log(visible);
-  }, [visible]);
+
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [id, setId] = useState('');
+
+  const realm = useRealm();
+  const announcements = useQuery<Announcement>('Announcement');
+
+  const handleAddAnnouncement = useCallback(
+    (titleA: string, contentA: string): void => {
+      if (!titleA) {
+        return;
+      }
+      realm.write(() => {
+        realm.create('Announcement', Announcement.generate(titleA, contentA));
+      });
+    },
+    [realm],
+  );
+
+  const handleDeleteAnnouncement = (val: any) => {
+    realm.write(() => {
+      realm.delete(
+        realm.objects('Announcement').filter((listObj: any) => {
+          return String(listObj._id) === String(val._id);
+        }),
+      );
+    });
+  };
 
   return (
     <>
@@ -41,37 +70,40 @@ const EditAnnouncement = ({navigation}: any) => {
             <DataTable.Title numeric>Select Action</DataTable.Title>
           </DataTable.Header>
           <ScrollView>
-            <HStack>
-              <DataTable.Cell
-                onPress={() => {
-                  setVisible(true);
-                }}>
-                Hoşgeliniz
-              </DataTable.Cell>
-              <IconButton
-                onPress={() => {
-                  navigation.goBack();
-                }}
-                className="h-[5vh] w-[5vh] rounded-lg m-[1vh]"
-                colorScheme="blue"
-                icon={<ThreeDotsIcon />}
-                variant="solid"
-              />
-              <IconButton
-                onPress={() => {
-                  navigation.goBack();
-                }}
-                className="h-[5vh] w-[5vh] rounded-lg m-[1vh]"
-                colorScheme="red"
-                icon={<DeleteIcon />}
-                variant="solid"
-              />
-            </HStack>
+            {announcements.map((val, i) => (
+              <HStack key={i}>
+                <DataTable.Cell>{val.title}</DataTable.Cell>
+                <IconButton
+                  onPress={() => {
+                    setContent(val.content);
+                    setTitle(val.title);
+                    setId(val._id.toHexString());
+                    setVisible(true);
+                  }}
+                  className="h-[5vh] w-[5vh] rounded-lg m-[1vh]"
+                  colorScheme="blue"
+                  icon={<ThreeDotsIcon />}
+                  variant="solid"
+                />
+                <IconButton
+                  onPress={() => {
+                    handleDeleteAnnouncement(val);
+                  }}
+                  className="h-[5vh] w-[5vh] rounded-lg m-[1vh]"
+                  colorScheme="red"
+                  icon={<DeleteIcon />}
+                  variant="solid"
+                />
+              </HStack>
+            ))}
           </ScrollView>
         </DataTable>
         <View className="absolute self-end right-[2vh] bottom-[10vh]">
           <IconButton
             onPress={() => {
+              setContent('');
+              setTitle('');
+              setId('');
               setVisible(true);
             }}
             className=" rounded-full m-[1vh]"
@@ -82,12 +114,19 @@ const EditAnnouncement = ({navigation}: any) => {
             variant="solid"
           />
         </View>
+        {visible && (
+          <View className="">
+            <AddAnnouncementModal
+              show={visible}
+              notShow={hidden}
+              title={title}
+              content={content}
+              addAnnouncement={handleAddAnnouncement}
+              id={id}
+            />
+          </View>
+        )}
       </View>
-      {visible && (
-        <View className="">
-          <AddAnnouncementModal show={visible} notShow={hidden} />
-        </View>
-      )}
     </>
   );
 };

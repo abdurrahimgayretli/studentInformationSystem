@@ -19,7 +19,7 @@ import {User, useRealm} from '../models/User';
 
 const SignUp = ({navigation}: any) => {
   const [selectTitle, setSelectTittle] = useState('');
-  const titles = ['Student', 'Lecturer'];
+  const titles = ['Student', 'Lecturer', 'Admin'];
 
   const realm = useRealm();
 
@@ -38,9 +38,28 @@ const SignUp = ({navigation}: any) => {
       realm.write(() => {
         realm.create(
           selectTitle,
-          User.register(tc, name, surName, telNo, mail, title, tc),
+          User.register(
+            tc,
+            name,
+            surName,
+            telNo,
+            mail,
+            title,
+            tc,
+            selectTitle === 'Admin' ? 'confirmed' : 'not confirmed',
+          ),
         );
-        realm.create('User', User.checkUser(tc, tc, title));
+        realm.create(
+          'User',
+          User.checkUser(
+            name,
+            surName,
+            tc,
+            tc,
+            title,
+            selectTitle === 'Admin' ? 'confirmed' : 'not confirmed',
+          ),
+        );
       });
     },
     [realm, selectTitle],

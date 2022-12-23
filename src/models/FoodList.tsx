@@ -2,10 +2,10 @@ import {Realm} from '@realm/react';
 
 export class FoodList extends Realm.Object {
   _id!: Realm.BSON.ObjectId;
-  date!: 'string';
-  list!: 'string';
+  date!: Date;
+  list!: string;
 
-  static generate(date: string, list: string) {
+  static generate(date: Date, list: string) {
     return {
       _id: new Realm.BSON.ObjectId(),
       date,
@@ -18,7 +18,7 @@ export class FoodList extends Realm.Object {
     primaryKey: '_id',
     properties: {
       _id: 'objectId',
-      date: 'string',
+      date: 'date',
       list: 'string',
     },
   };

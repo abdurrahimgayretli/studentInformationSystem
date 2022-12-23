@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {View} from 'react-native';
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {DataTable} from 'react-native-paper';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
@@ -12,13 +13,45 @@ import {
   AddIcon,
 } from 'native-base';
 import AddFoodListModal from '../../components/AddFoodListModal';
+import {useQuery, useRealm} from '../../models/User';
+import {FoodList} from '../../models/FoodList';
 
 const EditFoodList = ({navigation}: any) => {
   const [visible, setVisible] = React.useState(false);
   const hidden = () => setVisible(false);
-  React.useEffect(() => {
-    console.log(visible);
-  }, [visible]);
+
+  const [date, setDate] = React.useState(new Date());
+  const [foodList, setfoodList] = useState('');
+  const [id, setId] = useState('');
+
+  const realm = useRealm();
+  const foodLists = useQuery<FoodList>('FoodList');
+
+  const handleAddFoodList = useCallback(
+    (dateF: Date, foodListF: string): void => {
+      if (!dateF) {
+        return;
+      }
+      realm.write(() => {
+        realm.create('FoodList', FoodList.generate(dateF, foodListF));
+      });
+    },
+    [realm],
+  );
+
+  const handleDeleteFoodList = (val: any) => {
+    realm.write(() => {
+      realm.delete(
+        realm.objects('FoodList').filter((listObj: any) => {
+          return String(listObj._id) === String(val._id);
+        }),
+      );
+    });
+  };
+
+  useEffect(() => {
+    console.log(foodLists);
+  }, [foodLists]);
 
   return (
     <>
@@ -41,38 +74,44 @@ const EditFoodList = ({navigation}: any) => {
             <DataTable.Title numeric>Select Action</DataTable.Title>
           </DataTable.Header>
           <ScrollView>
-            <HStack>
-              <DataTable.Cell
-                className="left-[4vh]"
-                onPress={() => {
-                  setVisible(true);
-                }}>
-                <Text className="text-lg">01.02.2023</Text>
-              </DataTable.Cell>
-              <IconButton
-                onPress={() => {
-                  navigation.goBack();
-                }}
-                className="h-[5vh] w-[5vh] rounded-lg m-[1vh]"
-                colorScheme="blue"
-                icon={<ThreeDotsIcon />}
-                variant="solid"
-              />
-              <IconButton
-                onPress={() => {
-                  navigation.goBack();
-                }}
-                className="h-[5vh] w-[5vh] rounded-lg m-[1vh]"
-                colorScheme="red"
-                icon={<DeleteIcon />}
-                variant="solid"
-              />
-            </HStack>
+            {foodLists.map((val, i) => (
+              <HStack key={i}>
+                <DataTable.Cell className="left-[4vh]">
+                  <Text className="text-lg">
+                    {String(val.date.toISOString().split('T')[0])}
+                  </Text>
+                </DataTable.Cell>
+                <IconButton
+                  onPress={() => {
+                    setfoodList(val.list);
+                    setDate(val.date);
+                    setId(val._id.toHexString());
+                    setVisible(true);
+                  }}
+                  className="h-[5vh] w-[5vh] rounded-lg m-[1vh]"
+                  colorScheme="blue"
+                  icon={<ThreeDotsIcon />}
+                  variant="solid"
+                />
+                <IconButton
+                  onPress={() => {
+                    handleDeleteFoodList(val);
+                  }}
+                  className="h-[5vh] w-[5vh] rounded-lg m-[1vh]"
+                  colorScheme="red"
+                  icon={<DeleteIcon />}
+                  variant="solid"
+                />
+              </HStack>
+            ))}
           </ScrollView>
         </DataTable>
         <View className="absolute self-end right-[2vh] bottom-[10vh]">
           <IconButton
             onPress={() => {
+              setfoodList('');
+              setDate(new Date());
+              setId('');
               setVisible(true);
             }}
             className=" rounded-full m-[1vh]"
@@ -86,7 +125,14 @@ const EditFoodList = ({navigation}: any) => {
       </View>
       {visible && (
         <View className="">
-          <AddFoodListModal show={visible} notShow={hidden} />
+          <AddFoodListModal
+            show={visible}
+            notShow={hidden}
+            foodList={foodList}
+            date={date}
+            addFoodList={handleAddFoodList}
+            id={id}
+          />
         </View>
       )}
     </>

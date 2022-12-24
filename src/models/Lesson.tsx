@@ -1,13 +1,12 @@
 import {Realm} from '@realm/react';
-import {User} from './User';
 import {Exam} from './Exam';
+import {User} from './User';
 
 export class Lesson extends Realm.Object {
   _id!: Realm.BSON.ObjectId;
   lessonName!: string;
   exam!: Exam[];
-  students!: User[];
-  lecturer!: User;
+  lecturer!: User[];
 
   static addLesson(lessonName: string) {
     return {

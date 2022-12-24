@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {DataTable} from 'react-native-paper';
@@ -9,7 +10,6 @@ import {Lesson} from '../../models/Lesson';
 const SelectStudents = ({navigation}: any) => {
   const lecturers = useQuery<User>('Lecturer');
   const students = useQuery<User>('Student');
-  const lessons = useQuery<Lesson>('Lesson');
 
   const [lecturer, setLecturer] = useState<User>(lecturers[0]);
 
@@ -73,11 +73,6 @@ const SelectStudents = ({navigation}: any) => {
                   </DataTable.Row>
                 ));
             })}
-            {/* {lecturer.lesson.map((val: Lesson) =>
-              val.students.map((student, i) => (
-                
-              )),
-            )} */}
           </ScrollView>
         </DataTable>
       </View>

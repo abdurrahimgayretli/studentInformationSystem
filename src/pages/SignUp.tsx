@@ -69,12 +69,12 @@ const SignUp = ({navigation}: any) => {
     <View className="absolute self-center h-[100%] w-[100%] rounded-xl justify-center">
       <Formik
         initialValues={{
-          name: 'caner',
-          surName: 'köroglu',
-          tc: 61,
-          telNo: 43,
-          mail: 'caner@gmail.com',
-          title: '',
+          name: 'test',
+          surName: 'test',
+          tc: 11,
+          telNo: 11,
+          mail: 'test@gmail.com',
+          title: 'Student',
         }}
         onSubmit={values => {
           handleRegisterUser(
@@ -139,6 +139,7 @@ const SignUp = ({navigation}: any) => {
                   <FormControl.Label>Tittle</FormControl.Label>
                   <Select
                     selectedValue={selectTitle}
+                    defaultValue={selectTitle[0]}
                     placeholder={'Choose Title'}
                     _selectedItem={{
                       bg: 'teal.600',

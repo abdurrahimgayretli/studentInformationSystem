@@ -11,7 +11,7 @@ import ConfirmStudents from '../pages/ManagerPages/ConfirmStudents';
 import EditLessonList from '../pages/ManagerPages/EditLessonList';
 import EditAnnouncement from '../pages/ManagerPages/EditAnnouncement';
 import EditFoodList from '../pages/ManagerPages/EditFoodList';
-import {useQuery} from '../models/User';
+import {User, useQuery} from '../models/User';
 import {createStackNavigator} from '@react-navigation/stack';
 import SignUp from '../pages/SignUp';
 import Login from '../pages/Login';
@@ -39,9 +39,8 @@ const NavigationStack = () => {
 const NavigationDrawer = ({route}: any) => {
   const Drawer = createDrawerNavigator();
 
-  const users = useQuery<any>('User');
-  const lecturers = useQuery<any>('Lecturer');
-  const lesson = useQuery<any>('Lesson');
+  const users = useQuery<User>('User');
+  const lesson = useQuery<User>('Lesson');
 
   const {userTc} = route.params;
   const user = users.find(val => {
@@ -57,7 +56,7 @@ const NavigationDrawer = ({route}: any) => {
         initialParams={{user: user}}
         component={MainPage}
       />
-      {user.title === 'Student' ? (
+      {user?.title === 'Student' ? (
         <>
           <Drawer.Screen
             name="Student Info"
@@ -75,7 +74,7 @@ const NavigationDrawer = ({route}: any) => {
             component={ExamsResults}
           />
         </>
-      ) : user.title === 'Lecturer' ? (
+      ) : user?.title === 'Lecturer' ? (
         <>
           <Drawer.Screen name="Select Student" component={ExamStack} />
         </>

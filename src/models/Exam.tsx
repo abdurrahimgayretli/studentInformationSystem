@@ -5,12 +5,14 @@ export class Exam extends Realm.Object {
   _id!: Realm.BSON.ObjectId;
   lessonName!: string;
   examName!: string;
+  tc!: string;
   note!: string;
   lesson!: Lesson;
 
-  static addNote(examName: string, note: string) {
+  static addNote(tc: string, examName: string, note: string) {
     return {
       _id: new Realm.BSON.ObjectId(),
+      tc,
       examName,
       note,
     };
@@ -21,6 +23,7 @@ export class Exam extends Realm.Object {
     primaryKey: '_id',
     properties: {
       _id: 'objectId',
+      tc: 'string',
       examName: 'string',
       note: 'string',
       lesson: {

@@ -14,7 +14,7 @@ import {
 } from 'native-base';
 import AddLessonModal from '../../components/AddLessonModal';
 import {Lesson} from '../../models/Lesson';
-import {useQuery, useRealm} from '../../models/User';
+import {User, useQuery, useRealm} from '../../models/User';
 import AddStudentToLesson from '../../components/AddStudentToLesson';
 
 const EditLessonList = ({navigation}: any) => {
@@ -26,16 +26,16 @@ const EditLessonList = ({navigation}: any) => {
 
   const [lessonName, setLessonName] = useState('');
 
-  const lecturer = useQuery<any>('Lecturer');
+  const lecturer = useQuery<User>('Lecturer');
   const [lecturerName, setLecturerName] = useState('');
   const setLecturer = (name: string) => setLecturerName(name);
 
-  const students = useQuery<any>('Student');
+  const students = useQuery<User>('Student');
   const [studentName, setStudentName] = useState('');
   const setStudent = (name: string) => setStudentName(name);
 
   const realm = useRealm();
-  const lessons = useQuery<any>('Lesson');
+  const lessons = useQuery<Lesson>('Lesson');
 
   const handleAddLesson = useCallback(
     (lesson: string): void => {
@@ -43,19 +43,22 @@ const EditLessonList = ({navigation}: any) => {
         return;
       }
       realm.write(() => {
-        const newLesson = realm.create('Lesson', Lesson.addLesson(lesson));
+        const newLesson: Lesson = realm.create(
+          'Lesson',
+          Lesson.addLesson(lesson),
+        );
         lecturer
           .find(val => {
             return val.name === lecturerName;
           })
-          .lesson.push(newLesson);
+          ?.lesson.push(newLesson);
       });
     },
     [lecturer, lecturerName, realm],
   );
 
   const handleAddStudent = () => {
-    const lesson = lessons.find(val => {
+    const lesson: Lesson = lessons.find(val => {
       return val.lessonName === lessonName;
     });
     realm.write(() => {
@@ -63,7 +66,7 @@ const EditLessonList = ({navigation}: any) => {
         .find(val => {
           return val.name === studentName;
         })
-        .lesson.push(lesson);
+        ?.lesson.push(lesson);
     });
   };
 

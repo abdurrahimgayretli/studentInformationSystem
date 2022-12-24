@@ -47,13 +47,15 @@ const StudentInfo = ({navigation, route}: any) => {
             </DataTable>
             <DataTable className="top-[-4vh]">
               <DataTable.Header>
-                <DataTable.Title>Telephone Number</DataTable.Title>
-                <DataTable.Title numeric>Mail</DataTable.Title>
+                <DataTable.Title>Confirm</DataTable.Title>
+                <DataTable.Title numeric>Title</DataTable.Title>
               </DataTable.Header>
               <View className="top-[-2vh]">
                 <DataTable.Row>
-                  <DataTable.Cell>{user.telNo}</DataTable.Cell>
-                  <DataTable.Cell numeric>{user.mail}</DataTable.Cell>
+                  <DataTable.Cell>
+                    <Text className="capitalize">{user.confirm}</Text>
+                  </DataTable.Cell>
+                  <DataTable.Cell numeric>{user.title}</DataTable.Cell>
                 </DataTable.Row>
               </View>
             </DataTable>

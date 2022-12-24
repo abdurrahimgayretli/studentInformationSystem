@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import * as React from 'react';
+import React, {useState} from 'react';
 import {Modal, Portal} from 'react-native-paper';
 import {
   HStack,
@@ -13,6 +13,9 @@ import {
 } from 'native-base';
 
 const NoteModel = (props: any) => {
+  const [examName, setExamName] = useState('');
+  const [examNote, setExamNote] = useState('');
+
   return (
     <Portal>
       <NativeBaseProvider>
@@ -29,16 +32,28 @@ const NoteModel = (props: any) => {
           <HStack className="space-x-[50vh] self-center">
             <VStack space={4}>
               <Text className="text-gray-500 text-xs">Exam's Name</Text>
-              <Input placeholder="Final" />
+              <Input
+                placeholder="Final"
+                onChangeText={setExamName}
+                value={examName}
+              />
             </VStack>
             <VStack space={4}>
               <Text className="text-gray-500 w-[6vh] text-xs">Note</Text>
-              <Input placeholder="50" />
+              <Input
+                keyboardType="numeric"
+                placeholder="50"
+                onChangeText={setExamNote}
+                value={examNote}
+              />
             </VStack>
             <VStack space={4}>
               <Text className="text-gray-500 text-xs">Confirm</Text>
               <IconButton
-                onPress={props.notShow}
+                onPress={() => {
+                  props.AddExam(String(props.userTC), examName, examNote);
+                  props.notShow();
+                }}
                 className="h-[6vh] w-[6vh] rounded-lg"
                 colorScheme="green"
                 icon={<CheckIcon />}

@@ -85,7 +85,7 @@ const EditFoodList = ({navigation}: any) => {
                   onPress={() => {
                     setfoodList(val.list);
                     setDate(val.date);
-                    setId(val._id.toHexString());
+                    setId(String(val._id));
                     setVisible(true);
                   }}
                   className="h-[5vh] w-[5vh] rounded-lg m-[1vh]"

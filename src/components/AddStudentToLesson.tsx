@@ -15,21 +15,21 @@ import {
   View,
   CloseIcon,
 } from 'native-base';
-import {useQuery, useRealm} from '../models/User';
+import {User, useQuery, useRealm} from '../models/User';
 
 const AddStudentToLesson = (props: any) => {
   const [selectStudent, setSelectStudent] = React.useState('');
 
   const realm = useRealm();
 
-  const students = useQuery<any>('Student');
+  const students = useQuery<User>('Student');
   const [studentArray, setStudentArray] = React.useState<String[]>([]);
 
   const addLessontoStudent = (studentName: string) => {
     return props.student(
       students.find(val => {
         return val.name === String(studentName.split(' ')[0]);
-      }).name,
+      })?.name,
     );
   };
 
@@ -154,13 +154,6 @@ const AddStudentToLesson = (props: any) => {
                     />
                   </Box>
                 ))}
-              {/* {lesson
-                .filter(val => {
-                  return val.lessonName === props.lessonName;
-                })[0]
-                .students.map((elem: any) => (
-                 
-                ))} */}
             </ScrollView>
           </VStack>
         </Modal>

@@ -12,7 +12,7 @@ import {
   VStack,
   Select,
 } from 'native-base';
-import {useQuery} from '../models/User';
+import {User, useQuery} from '../models/User';
 
 const AddLessonModal = (props: any) => {
   const [text, onChangeText] = React.useState(props.lesson);
@@ -20,14 +20,14 @@ const AddLessonModal = (props: any) => {
     props.lecturerName,
   );
 
-  const lecturers = useQuery<any>('Lecturer');
+  const lecturers = useQuery<User>('Lecturer');
   const [lecturerArray, setLecturerArray] = React.useState<String[]>([]);
 
   const addLessontoLecturer = (lecturerName: string) => {
     return props.lecturer(
       lecturers.find(val => {
         return val.name === String(lecturerName.split(' ')[0]);
-      }).name,
+      })?.name,
     );
   };
 

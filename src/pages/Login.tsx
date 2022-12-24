@@ -13,12 +13,11 @@ import {
   Text,
   Link,
 } from 'native-base';
-import {useQuery, useRealm} from '../models/User';
+import {User, useQuery} from '../models/User';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}: any) => {
-  const user = useQuery<any>('User');
-  const realm = useRealm();
+  const user = useQuery<User>('User');
 
   useEffect(() => {
     console.log(user);
@@ -35,11 +34,6 @@ const Login = ({navigation}: any) => {
       ? navigation.navigate('Pages', {userTc: values.tc})
       : console.log(false);
     storeData(values.tc);
-  };
-  const deleteAll = () => {
-    realm.write(() => {
-      realm.deleteAll();
-    });
   };
 
   const storeData = async (tc: string) => {

@@ -77,7 +77,7 @@ const EditAnnouncement = ({navigation}: any) => {
                   onPress={() => {
                     setContent(val.content);
                     setTitle(val.title);
-                    setId(val._id.toHexString());
+                    setId(String(val._id));
                     setVisible(true);
                   }}
                   className="h-[5vh] w-[5vh] rounded-lg m-[1vh]"

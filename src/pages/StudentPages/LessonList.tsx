@@ -1,10 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {DataTable} from 'react-native-paper';
 import {IconButton, HamburgerIcon, HStack, Text} from 'native-base';
+import {User, useQuery} from '../../models/User';
+import {Lesson} from '../../models/Lesson';
 
 const StudentPage = ({navigation, route}: any) => {
   const {user} = route.params;
+
+  const students = useQuery<User>('Student');
+  const [student] = useState<User>(
+    students.filter(stud => {
+      return stud.tc === user.tc;
+    })[0],
+  );
+
   return (
     <>
       <HStack>
@@ -26,14 +36,16 @@ const StudentPage = ({navigation, route}: any) => {
             <DataTable.Title numeric>Lecturer's Name</DataTable.Title>
           </DataTable.Header>
           <ScrollView>
-            <DataTable.Row>
-              {user.lesson.map((val: any) => (
-                <>
-                  <DataTable.Cell>{val.lessonName}</DataTable.Cell>
-                  <DataTable.Cell numeric>{val.lecturer.name}</DataTable.Cell>
-                </>
-              ))}
-            </DataTable.Row>
+            {student.lesson.map((les: Lesson, i) => (
+              <>
+                {les.lecturer.map((lec: User) => (
+                  <DataTable.Row key={i}>
+                    <DataTable.Cell>{les.lessonName}</DataTable.Cell>
+                    <DataTable.Cell numeric>{lec.name}</DataTable.Cell>
+                  </DataTable.Row>
+                ))}
+              </>
+            ))}
           </ScrollView>
         </DataTable>
       </View>

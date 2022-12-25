@@ -51,7 +51,11 @@ const NoteModel = (props: any) => {
               <Text className="text-gray-500 text-xs">Confirm</Text>
               <IconButton
                 onPress={() => {
-                  props.AddExam(String(props.userTC), examName, examNote);
+                  props.AddExam(
+                    Number(props.userTC),
+                    examName,
+                    Number(examNote),
+                  );
                   props.notShow();
                 }}
                 className="h-[6vh] w-[6vh] rounded-lg"

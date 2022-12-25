@@ -7,12 +7,12 @@ import {Lesson} from '../../models/Lesson';
 import {Exam} from '../../models/Exam';
 
 const ExamsResults = ({navigation, route}: any) => {
-  const userInfo = route.params;
+  const {user} = route.params;
 
   const students = useQuery<User>('Student');
   const [student] = useState<User>(
     students.filter((stud: User) => {
-      return stud.tc === String(userInfo.user.tc);
+      return stud.tc === Number(user.tc);
     })[0],
   );
 
@@ -25,7 +25,7 @@ const ExamsResults = ({navigation, route}: any) => {
         return les.lessonName === lessonName;
       })[0]
       .exam.filter((ex: Exam) => {
-        return ex.tc === String(userInfo.user.tc);
+        return ex.tc === Number(user.tc);
       })
       .map((eNote, i) => {
         note += Number(eNote.note);
@@ -83,14 +83,14 @@ const ExamsResults = ({navigation, route}: any) => {
             <Text className="text-gray-500 text-xs">Letter Grade</Text>
           </HStack>
           <ScrollView>
-            {student.lesson.map((les: Lesson) => (
-              <>
+            {student?.lesson.map((les: Lesson, i) => (
+              <View key={i}>
                 {les.exam
                   .filter(ex => {
-                    return ex.tc === String(userInfo.user.tc);
+                    return ex.tc === Number(user.tc);
                   })
-                  .map((val, i) => (
-                    <DataTable.Row key={i}>
+                  .map(val => (
+                    <DataTable.Row>
                       <DataTable.Cell className="right-[1vh]">
                         {les.lessonName}
                       </DataTable.Cell>
@@ -101,7 +101,7 @@ const ExamsResults = ({navigation, route}: any) => {
                       </DataTable.Cell>
                     </DataTable.Row>
                   ))}
-              </>
+              </View>
             ))}
           </ScrollView>
         </DataTable>

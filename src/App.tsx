@@ -5,6 +5,7 @@ import NavigationDrawer from './components/NavigationDrawer';
 import {NativeBaseProvider} from 'native-base';
 
 import {RealmProvider} from './models/User';
+import {NavigationContainer} from '@react-navigation/native';
 
 export default function App() {
   return (
@@ -12,7 +13,9 @@ export default function App() {
       <NativeBaseProvider>
         <RealmProvider>
           <SafeAreaView className="flex-1 bg-white">
-            <NavigationDrawer />
+            <NavigationContainer>
+              <NavigationDrawer />
+            </NavigationContainer>
           </SafeAreaView>
         </RealmProvider>
       </NativeBaseProvider>

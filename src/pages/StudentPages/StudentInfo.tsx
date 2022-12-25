@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 import React from 'react';
-import {Avatar, Card, DataTable} from 'react-native-paper';
+import {Card, DataTable} from 'react-native-paper';
 import {IconButton, HamburgerIcon, HStack, Text} from 'native-base';
 
 const StudentInfo = ({navigation, route}: any) => {
@@ -22,12 +22,6 @@ const StudentInfo = ({navigation, route}: any) => {
       </HStack>
       <View className="h-[100%] absolute top-[20vh] w-[100%]">
         <Card className="bg-slate-100 pt-[3vh]">
-          <Avatar.Image
-            className="self-center"
-            size={150}
-            source={require('../../../assets/photo.png')}
-          />
-
           <Card.Content>
             <DataTable>
               <DataTable.Header>

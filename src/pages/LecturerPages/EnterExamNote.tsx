@@ -13,23 +13,24 @@ const EnterExamNote = ({route}: any) => {
   const [visible, setVisible] = React.useState(false);
   const hidden = () => setVisible(false);
 
-  const userInfo = route.params;
+  const {studentTc, studentLesson}: {studentTc: Number; studentLesson: String} =
+    route.params;
 
   const realm = useRealm();
   const students = useQuery<User>('Student');
   const [student] = useState<User>(
     students.filter((stud: User) => {
-      return stud.tc === userInfo.studentTc.toString();
+      return stud.tc === Number(studentTc);
     })[0],
   );
   const [lesson] = useState<Lesson>(
     student.lesson.filter((les: Lesson) => {
-      return les.lessonName === userInfo.studentLesson.toString();
+      return les.lessonName === studentLesson;
     })[0],
   );
 
   const handleAddExam = useCallback(
-    (tc: string, examName: string, note: string): void => {
+    (tc: number, examName: string, note: number): void => {
       if (!examName && !note) {
         return;
       }
@@ -54,14 +55,6 @@ const EnterExamNote = ({route}: any) => {
     });
   };
 
-  useEffect(() => {
-    console.log(
-      lesson.exam.filter((ex: Exam) => {
-        return ex.tc === userInfo.studentTc.toString();
-      }),
-    );
-  }, []);
-
   return (
     <View className="h-[100%] w-[100%] top-[1vh] absolute">
       <DataTable className="w-[90%] h-[90%] self-center ">
@@ -73,7 +66,7 @@ const EnterExamNote = ({route}: any) => {
         <ScrollView>
           {lesson.exam
             .filter((ex: Exam) => {
-              return ex.tc === userInfo.studentTc.toString();
+              return ex.tc === studentTc;
             })
             .map((exam: Exam, i) => (
               <DataTable.Row key={i}>
@@ -116,7 +109,7 @@ const EnterExamNote = ({route}: any) => {
           <NoteModel
             show={visible}
             notShow={hidden}
-            userTC={userInfo.studentTc}
+            userTC={studentTc}
             AddExam={handleAddExam}
           />
         </View>

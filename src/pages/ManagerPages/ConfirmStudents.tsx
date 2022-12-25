@@ -1,5 +1,5 @@
 import {View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {DataTable} from 'react-native-paper';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
@@ -19,13 +19,21 @@ const ConfirmStudents = ({navigation}: any) => {
 
   const realm = useRealm();
   const users = useQuery<User>('User');
+  const students = useQuery<User>('Student');
   const [userID, setUserID] = useState('');
+  const [user, setUser] = useState<User>(users[0]);
 
-  const handleDeleteUser = (val: any) => {
+  const handleDeleteUser = (id: any) => {
     realm.write(() => {
       realm.delete(
-        realm.objects('User').filter((listObj: any) => {
-          return String(listObj._id) === String(val._id);
+        realm.objects<User>('User').filter((listObj: User) => {
+          setUser(listObj);
+          return String(listObj._id) === String(id);
+        }),
+      );
+      realm.delete(
+        realm.objects<User>(user.title).filter((listObj: User) => {
+          return String(listObj.tc) === String(user.tc);
         }),
       );
     });

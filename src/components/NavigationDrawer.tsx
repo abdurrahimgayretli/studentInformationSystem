@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import * as React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {NavigationContainer} from '@react-navigation/native';
 import MainPage from '../pages/MainPage';
 import LessonList from '../pages/StudentPages/LessonList';
 import ExamsResults from '../pages/StudentPages/ExamsResults';
@@ -13,26 +12,24 @@ import EditAnnouncement from '../pages/ManagerPages/EditAnnouncement';
 import EditFoodList from '../pages/ManagerPages/EditFoodList';
 import {User, useQuery} from '../models/User';
 import {createStackNavigator} from '@react-navigation/stack';
-import SignUp from '../pages/SignUp';
-import Login from '../pages/Login';
+import SignUp from '../pages/SignUp/SignUp';
+import Login from '../pages/Login/Login';
 
 const NavigationStack = () => {
   const Stack = createStackNavigator();
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{headerShown: false}}
-        initialRouteName="Sign Up">
-        <Stack.Screen name="Sign Up" component={SignUp} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen
-          name="Pages"
-          component={NavigationDrawer}
-          options={{headerShown: false}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator
+      screenOptions={{headerShown: false}}
+      initialRouteName="Login">
+      <Stack.Screen name="Sign Up" component={SignUp} />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen
+        name="Pages"
+        component={NavigationDrawer}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
   );
 };
 
@@ -43,8 +40,8 @@ const NavigationDrawer = ({route}: any) => {
   const lesson = useQuery<User>('Lesson');
 
   const {userTc} = route.params;
-  const user = users.find(val => {
-    return val.tc === userTc;
+  const user = users.find((val: User) => {
+    return val.tc === Number(userTc);
   });
 
   return (
@@ -93,6 +90,7 @@ const NavigationDrawer = ({route}: any) => {
           <Drawer.Screen name="Edit Food List" component={EditFoodList} />
         </>
       )}
+      <Drawer.Screen name="Logout" component={NavigationStack} />
     </Drawer.Navigator>
   );
 };

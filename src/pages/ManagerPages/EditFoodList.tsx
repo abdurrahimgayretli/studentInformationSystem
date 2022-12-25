@@ -49,10 +49,6 @@ const EditFoodList = ({navigation}: any) => {
     });
   };
 
-  useEffect(() => {
-    console.log(foodLists);
-  }, [foodLists]);
-
   return (
     <>
       <HStack>
@@ -74,12 +70,10 @@ const EditFoodList = ({navigation}: any) => {
             <DataTable.Title numeric>Select Action</DataTable.Title>
           </DataTable.Header>
           <ScrollView>
-            {foodLists.map((val, i) => (
+            {foodLists.sorted('date').map((val, i) => (
               <HStack key={i}>
                 <DataTable.Cell className="left-[4vh]">
-                  <Text className="text-lg">
-                    {String(val.date.toISOString().split('T')[0])}
-                  </Text>
+                  <Text className="text-lg">{val.date.toDateString()}</Text>
                 </DataTable.Cell>
                 <IconButton
                   onPress={() => {

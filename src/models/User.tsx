@@ -6,10 +6,10 @@ import {Exam} from './Exam';
 
 export class User extends Realm.Object {
   _id!: Realm.BSON.ObjectId;
-  tc!: string;
+  tc!: number;
   name!: string;
   surName!: string;
-  telNo!: string;
+  telNo!: number;
   mail!: string;
   title!: string;
   password!: string;
@@ -17,10 +17,10 @@ export class User extends Realm.Object {
   lesson!: Lesson[];
 
   static register(
-    tc: string,
+    tc: number,
     name: string,
     surName: string,
-    telNo: string,
+    telNo: number,
     mail: string,
     title: string,
     password: string,
@@ -41,7 +41,7 @@ export class User extends Realm.Object {
   static checkUser(
     name: string,
     surName: string,
-    tc: string,
+    tc: number,
     password: string,
     title: string,
     confirm: string,
@@ -62,10 +62,10 @@ export class User extends Realm.Object {
     primaryKey: '_id',
     properties: {
       _id: 'objectId',
-      tc: 'string',
+      tc: 'int',
       name: 'string',
       surName: 'string',
-      telNo: 'string',
+      telNo: 'int',
       mail: 'string',
       title: 'string',
       password: 'string',
@@ -77,10 +77,10 @@ export class User extends Realm.Object {
     primaryKey: '_id',
     properties: {
       _id: 'objectId',
-      tc: 'string',
+      tc: 'int',
       name: 'string',
       surName: 'string',
-      telNo: 'string',
+      telNo: 'int',
       mail: 'string',
       title: 'string',
       password: 'string',
@@ -92,10 +92,10 @@ export class User extends Realm.Object {
     primaryKey: '_id',
     properties: {
       _id: 'objectId',
-      tc: 'string',
+      tc: 'int',
       name: 'string',
       surName: 'string',
-      telNo: 'string',
+      telNo: 'int',
       mail: 'string',
       title: 'string',
       password: 'string',
@@ -108,7 +108,7 @@ export class User extends Realm.Object {
       _id: 'objectId',
       name: 'string',
       surName: 'string',
-      tc: 'string',
+      tc: 'int',
       password: 'string',
       title: 'string',
       confirm: 'string',

@@ -45,11 +45,6 @@ const ConfirmStudentModal = (props: any) => {
               icon={<CloseIcon />}
               variant="solid"
             />
-            <Avatar.Image
-              className="self-center"
-              size={150}
-              source={require('../../assets/photo.png')}
-            />
 
             <Card.Content>
               <HStack className="pt-[1vh] space-x-[60vh] self-center">

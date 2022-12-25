@@ -36,15 +36,17 @@ const StudentPage = ({navigation, route}: any) => {
             <DataTable.Title numeric>Lecturer's Name</DataTable.Title>
           </DataTable.Header>
           <ScrollView>
-            {student.lesson.map((les: Lesson, i) => (
-              <>
-                {les.lecturer.map((lec: User) => (
+            {student?.lesson.map((les: Lesson, k) => (
+              <View key={k}>
+                {les.lecturer.map((lec: User, i) => (
                   <DataTable.Row key={i}>
                     <DataTable.Cell>{les.lessonName}</DataTable.Cell>
-                    <DataTable.Cell numeric>{lec.name}</DataTable.Cell>
+                    <DataTable.Cell numeric>
+                      {lec.name + ' ' + lec.surName}
+                    </DataTable.Cell>
                   </DataTable.Row>
                 ))}
-              </>
+              </View>
             ))}
           </ScrollView>
         </DataTable>

@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {View} from 'react-native';
+import React from 'react';
+import {View, ToastAndroid} from 'react-native';
 import {Formik} from 'formik';
 import {
   Box,
@@ -12,27 +12,32 @@ import {
   HStack,
   Text,
   Link,
+  Alert,
 } from 'native-base';
-import {User, useQuery} from '../models/User';
+import {User, useQuery} from '../../models/User';
+import validationSchema from './validations';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}: any) => {
   const user = useQuery<User>('User');
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   const login = (values: any) => {
     user.find(val => {
       return (
-        val.tc === values.tc &&
-        val.password === values.password &&
-        val.confirm === 'confirmed'
+        Number(val.tc) === Number(values.tc) &&
+        String(val.password) === String(values.password)
       );
-    }) !== undefined
-      ? navigation.navigate('Pages', {userTc: values.tc})
-      : console.log(false);
+    }) === undefined
+      ? ToastAndroid.show('Wrong TC or password', ToastAndroid.SHORT)
+      : user.find(val => {
+          return (
+            Number(val.tc) === Number(values.tc) &&
+            String(val.password) === String(values.password) &&
+            val.confirm === 'confirmed'
+          );
+        }) === undefined
+      ? ToastAndroid.show('User not confirmed', ToastAndroid.SHORT)
+      : navigation.navigate('Pages', {userTc: values.tc});
     storeData(values.tc);
   };
 
@@ -48,13 +53,21 @@ const Login = ({navigation}: any) => {
     <View className="absolute self-center h-[100%] w-[100%] rounded-xl justify-center">
       <Formik
         initialValues={{
-          tc: '11',
-          password: '11',
+          tc: '1',
+          password: '1',
         }}
+        validationSchema={validationSchema}
         onSubmit={values => {
           login(values);
         }}>
-        {({handleChange, handleBlur, handleSubmit, values}) => (
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          touched,
+          errors,
+        }) => (
           <Center className="w-full">
             <Box safeArea className="p-[1vh] w-[80%] py-[4vh] ">
               <Heading className="text-gray-800 font-semibold">Welcome</Heading>
@@ -68,31 +81,30 @@ const Login = ({navigation}: any) => {
                     onChangeText={handleChange('tc')}
                     onBlur={handleBlur('tc')}
                     value={String(values.tc)}
+                    isInvalid={touched.tc && Boolean(errors.tc)}
                   />
+                  {errors.tc && touched.tc && (
+                    <Alert status="error">{errors.tc}</Alert>
+                  )}
                 </FormControl>
                 <FormControl>
                   <FormControl.Label>Password</FormControl.Label>
                   <Input
+                    type="password"
                     onChangeText={handleChange('password')}
                     onBlur={handleBlur('password')}
                     value={String(values.password)}
+                    isInvalid={touched.password && Boolean(errors.password)}
                   />
-                  <Link
-                    _text={{
-                      fontSize: 'xs',
-                      fontWeight: '500',
-                      color: 'indigo.500',
-                    }}
-                    alignSelf="flex-end"
-                    mt="1">
-                    Forget Password?
-                  </Link>
+                  {errors.password && touched.password && (
+                    <Alert status="error">{errors.password}</Alert>
+                  )}
                 </FormControl>
 
                 <Button
                   onPress={handleSubmit}
                   className="mt-[1vh] bg-indigo-900">
-                  Sign up
+                  Login
                 </Button>
                 <HStack mt="6" justifyContent="center">
                   <Text

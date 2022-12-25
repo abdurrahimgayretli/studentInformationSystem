@@ -18,7 +18,7 @@ const SelectStudents = ({navigation}: any) => {
       const tc = await AsyncStorage.getItem('@tc');
       setLecturer(
         lecturers.filter(val => {
-          return val.tc === tc;
+          return val.tc === Number(tc);
         })[0],
       );
     } catch (e) {
@@ -50,9 +50,9 @@ const SelectStudents = ({navigation}: any) => {
             <DataTable.Title numeric>Lesson's Name</DataTable.Title>
           </DataTable.Header>
           <ScrollView>
-            {students.map(student => {
+            {students?.map(student => {
               return student.lesson
-                .filter((lesson: Lesson | any) => {
+                .filter((lesson: Lesson) => {
                   return lesson?.lecturer[0].tc === lecturer.tc;
                 })
                 .map((val, i) => (

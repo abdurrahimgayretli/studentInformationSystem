@@ -46,10 +46,6 @@ const AddStudentToLesson = (props: any) => {
   };
 
   useEffect(() => {
-    selectStudent !== '' && console.log(isThereLesson());
-  }, [selectStudent]);
-
-  useEffect(() => {
     students.forEach(val => {
       return setStudentArray(oldArray => [
         ...oldArray,
@@ -108,11 +104,10 @@ const AddStudentToLesson = (props: any) => {
                 <IconButton
                   onPress={() => {
                     props.addLesson();
-                    props.notShow();
                   }}
                   disabled={!isThereLesson()}
                   className="h-[6vh] w-[6vh] rounded-lg"
-                  colorScheme="green"
+                  colorScheme={`${isThereLesson() ? 'green' : 'gray'}`}
                   icon={<CheckIcon />}
                   variant="solid"
                 />
@@ -137,13 +132,11 @@ const AddStudentToLesson = (props: any) => {
                     <IconButton
                       onPress={() => {
                         realm.write(() => {
-                          console.log(
-                            elem.lesson.splice(
-                              elem.lesson.findIndex((val: any) => {
-                                return val.lessonName === props.lessonName;
-                              }),
-                              1,
-                            ),
+                          elem.lesson.splice(
+                            elem.lesson.findIndex((val: any) => {
+                              return val.lessonName === props.lessonName;
+                            }),
+                            1,
                           );
                         });
                       }}

@@ -31,10 +31,6 @@ const AddFoodListModal = (props: any) => {
     });
   };
 
-  React.useEffect(() => {
-    console.log(date);
-  }, [date]);
-
   return (
     <Portal>
       <NativeBaseProvider>
